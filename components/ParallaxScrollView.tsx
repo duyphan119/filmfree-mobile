@@ -5,8 +5,6 @@ import Animated, { useAnimatedRef } from "react-native-reanimated";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const HEADER_HEIGHT = 250;
-
 type Props = PropsWithChildren<{
   header?: ReactElement;
 }>;
@@ -16,8 +14,8 @@ export default function ParallaxScrollView({ children, header }: Props) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {header}
       <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
-        {header}
         {children}
       </Animated.ScrollView>
     </SafeAreaView>

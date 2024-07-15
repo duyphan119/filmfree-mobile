@@ -6,7 +6,10 @@ import { Image } from "expo-image";
 import { useEffect, useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ParallaxScrollView from "../ParallaxScrollView";
+import ContentFilm from "./ContentFilm";
 import VideoPlayer from "./VideoPlayer";
+import { Colors } from "@/constants/Colors";
+import ArrowCloseModal from "../ArrowCloseModal";
 
 const ModalStreaming = () => {
   const { name, visible, onHide, data } = useModal();
@@ -42,126 +45,48 @@ const ModalStreaming = () => {
   const currentEpisode = state.episodes.length > 0 ? state.episodes[0] : null;
 
   return (
-    <Modal
-      visible={visible}
-      onRequestClose={onHide}
-      animationType="none"
-      presentationStyle="fullScreen"
-    >
-      <View
-        style={{
-          padding: Padding.header,
-          backgroundColor: "#333",
-        }}
-      >
-        <TouchableOpacity onPress={onHide}>
-          <MaterialIcons
-            name="arrow-back"
-            style={{ color: "white" }}
-            size={24}
-          />
-        </TouchableOpacity>
-      </View>
+    <Modal visible={visible} onRequestClose={onHide} animationType="none">
+      <ArrowCloseModal />
       <VideoPlayer
         uri={state.episodes?.[0]?.server_data?.[0].link_m3u8 || ""}
       />
-      <View
-        style={{
-          backgroundColor: "#333",
-          flex: 1,
-        }}
-      >
+      <View style={styles.filmWrapper}>
         <ParallaxScrollView>
-          <Text
-            style={{
-              padding: Padding.header,
-              fontSize: 20,
-              fontWeight: 500,
-              backgroundColor: "#333",
-              color: "white",
-            }}
-          >
-            {movieName}
-          </Text>
-          <View
-            style={{
-              backgroundColor: "#333",
-              flex: 1,
-              padding: Padding.header,
-              rowGap: Padding.header,
-            }}
-          >
-            <Text
-              style={{
-                color: "white",
-              }}
-            >
-              Diễn viên: {state?.movie?.actor?.join(", ")}
-            </Text>
-            <Text
-              style={{
-                color: "white",
-              }}
-            >
-              Đạo diễn: {state?.movie?.director?.join(", ")}
-            </Text>
-            <Text
-              style={{
-                color: "white",
-              }}
-            >
-              Thể loại:{" "}
-              {state?.movie?.category?.map((item) => item.name).join(", ")}
-            </Text>
-            <Text
-              style={{
-                color: "white",
-              }}
-            >
-              Quốc gia:{" "}
-              {state?.movie?.country?.map((item) => item.name).join(", ")}
-            </Text>
-          </View>
-          {currentEpisode && currentEpisode.server_data?.length > 1 && (
-            <View
-              style={{
-                backgroundColor: "#333",
-              }}
-            >
-              <Text
-                style={{
-                  padding: Padding.header,
-                  color: "white",
-                }}
-              >
-                Danh sách tập
+          <Text style={styles.filmName}>{movieName}</Text>
+          {state.movie && (
+            <View style={styles.filmInfoList}>
+              <Text style={styles.filmInfo}>
+                Diễn viên: {state.movie?.actor?.join(", ")}
               </Text>
-              <View
-                style={{
-                  backgroundColor: "#333",
-                  rowGap: 2,
-                }}
-              >
+              <Text style={styles.filmInfo}>
+                Đạo diễn: {state.movie?.director?.join(", ")}
+              </Text>
+              <Text style={styles.filmInfo}>
+                Thể loại:{" "}
+                {state.movie?.category?.map((item) => item.name).join(", ")}
+              </Text>
+              <Text style={styles.filmInfo}>
+                Quốc gia:{" "}
+                {state.movie?.country?.map((item) => item.name).join(", ")}
+              </Text>
+              <ContentFilm content={state.movie?.content} />
+            </View>
+          )}
+          {currentEpisode && currentEpisode.server_data?.length > 1 && (
+            <View style={styles.episodeListWrapper}>
+              <Text style={styles.episodeListText}>Danh sách tập</Text>
+              <View style={styles.episodeWrapper}>
                 {currentEpisode.server_data.map(({ name }, index) => (
                   <TouchableOpacity
                     key={index}
                     onPress={() => {}}
-                    style={{
-                      height: 96,
-                      flexDirection: "row",
-                      columnGap: 12,
-                      alignItems: "center",
-                    }}
+                    style={styles.episode}
                   >
                     <Image
-                      source={state?.movie?.thumb_url || data?.movie?.thumb_url}
-                      style={{
-                        height: "100%",
-                        aspectRatio: 16 / 9,
-                        objectFit: "cover",
-                      }}
+                      source={state.movie?.thumb_url || data?.movie?.thumb_url}
+                      style={styles.episodeImage}
                     />
-                    <Text style={{ color: "white" }}>{name}</Text>
+                    <Text style={styles.episodeName}>{name}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -175,4 +100,50 @@ const ModalStreaming = () => {
 
 export default ModalStreaming;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  filmWrapper: {
+    backgroundColor: Colors.bg,
+    flex: 1,
+  },
+  filmName: {
+    padding: Padding.header,
+    fontSize: 20,
+    fontWeight: "500",
+    backgroundColor: Colors.bg,
+    color: Colors.white,
+  },
+  filmInfoList: {
+    backgroundColor: Colors.bg,
+    flex: 1,
+    padding: Padding.header,
+    rowGap: Padding.header,
+  },
+  filmInfo: {
+    color: Colors.white,
+  },
+  episodeListWrapper: {
+    backgroundColor: Colors.bg,
+  },
+  episodeListText: {
+    padding: Padding.header,
+    color: Colors.white,
+  },
+  episodeWrapper: {
+    backgroundColor: Colors.bg,
+    rowGap: 2,
+  },
+  episode: {
+    height: 96,
+    flexDirection: "row",
+    columnGap: 12,
+    alignItems: "center",
+  },
+  episodeImage: {
+    height: "100%",
+    aspectRatio: 16 / 9,
+    objectFit: "cover",
+  },
+  episodeName: {
+    color: Colors.white,
+  },
+});

@@ -1,8 +1,8 @@
 import { Colors } from "@/constants/Colors";
 import { Padding } from "@/constants/Padding";
-import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import SearchIcon from "./SearchIcon";
 
 const Header = () => {
   return (
@@ -10,9 +10,7 @@ const Header = () => {
       <Link href="/" style={styles.logo}>
         FILMFREE
       </Link>
-      <TouchableOpacity>
-        <Ionicons name="search" style={styles.search} />
-      </TouchableOpacity>
+      <SearchIcon />
     </View>
   );
 };
@@ -26,15 +24,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
   },
   logo: {
     fontWeight: "500",
     fontSize: 24,
     color: Colors.text,
-  },
-  search: {
-    color: Colors.text,
-    fontSize: 24,
   },
 });

@@ -1,8 +1,8 @@
 import { LatestFilm, filmApi } from "@/api/filmApi";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import PagerView from "react-native-pager-view";
+import { Dimensions, StyleSheet, View } from "react-native";
+import Carousel from "react-native-reanimated-carousel";
 
 const LatestFilmCarosel = () => {
   const [films, setfilms] = useState<LatestFilm[]>([]);
@@ -17,19 +17,29 @@ const LatestFilmCarosel = () => {
     fetchLatestFilms();
   }, []);
 
+  const width = Dimensions.get("window").width;
   return (
-    <PagerView style={{ height: 200 }} initialPage={0}>
-      {films.map((item, index) => (
-        <View key={item._id} style={styles.imageWrapper}>
-          <Image
-            style={styles.image}
-            source={item.thumb_url}
-            contentFit="cover"
-            transition={1000}
-          />
-        </View>
-      ))}
-    </PagerView>
+    <View style={{ flex: 1 }}>
+      <Carousel
+        loop
+        width={width}
+        height={(width * 9) / 16}
+        autoPlay={true}
+        data={films}
+        scrollAnimationDuration={3456}
+        // onSnapToItem={(index) => console.log("current index:", index)}
+        renderItem={({ item }) => (
+          <View style={styles.imageWrapper}>
+            <Image
+              style={styles.image}
+              source={item.thumb_url}
+              contentFit="cover"
+              transition={1000}
+            />
+          </View>
+        )}
+      />
+    </View>
   );
 };
 

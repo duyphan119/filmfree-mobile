@@ -139,4 +139,14 @@ export const filmApi = {
       return null;
     }
   },
+  search: async (keyword: string, params?: Record<string, any>) => {
+    try {
+      const response = await axios.get("https://phimapi.com/v1/api/tim-kiem", {
+        params: { keyword, ...params },
+      });
+      return response.data.data as FilmListResponse;
+    } catch (error) {
+      return null;
+    }
+  },
 };
