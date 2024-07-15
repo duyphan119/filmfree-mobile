@@ -3,16 +3,16 @@ import React from "react";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "dark"].tint,
+        tabBarActiveTintColor: Colors.text,
         headerShown: false,
+        tabBarStyle: {
+          backgroundColor: Colors.bg,
+        },
       }}
     >
       <Tabs.Screen
@@ -30,10 +30,22 @@ export default function TabLayout() {
       <Tabs.Screen
         name="explore"
         options={{
-          title: "Explore",
+          title: "Khám phá",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
+              name={focused ? "search" : "search-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="download"
+        options={{
+          title: "Tải về",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "download" : "download-outline"}
               color={color}
             />
           ),

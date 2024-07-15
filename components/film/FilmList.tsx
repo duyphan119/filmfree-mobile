@@ -1,28 +1,17 @@
-import {
-  Alert,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { ThemedView } from "../ThemedView";
-import { ThemedText } from "../ThemedText";
-import { FilmListResponse, Movie, filmApi } from "@/api/filmApi";
-import { Image } from "expo-image";
-import { MaterialIcons } from "@expo/vector-icons";
+import { FilmListResponse, filmApi } from "@/api/filmApi";
+import { Colors } from "@/constants/Colors";
 import { useModal } from "@/hooks/useModal";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type FilmListProps = {
   slug: string;
   title: string;
-  style?: StyleProp<ViewStyle>;
 };
 
-const FilmList = ({ slug, title, style }: FilmListProps) => {
+const FilmList = ({ slug, title }: FilmListProps) => {
   const [data, setData] = useState<FilmListResponse>();
 
   const { onShow } = useModal();
@@ -44,47 +33,66 @@ const FilmList = ({ slug, title, style }: FilmListProps) => {
   if (!data) return null;
 
   return (
-    <ThemedView style={[{ paddingHorizontal: 8 }, style]}>
+    <View style={styles.container}>
       <TouchableOpacity>
-        <ThemedView
-          style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
-        >
-          <ThemedText style={{ fontSize: 20, paddingVertical: 12 }}>
-            {title}
-          </ThemedText>
-          <MaterialIcons name="chevron-right" size={20} />
-        </ThemedView>
+        <View style={styles.titleWrapper}>
+          <Text style={styles.title}>{title}</Text>
+          <MaterialIcons name="chevron-right" style={styles.titleIcon} />
+        </View>
       </TouchableOpacity>
-      <ThemedView
-        style={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          rowGap: 8,
-        }}
-      >
-        {data.items.map((item) => (
+      <View style={styles.filmList}>
+        {data.items.map((movie) => (
           <TouchableOpacity
-            key={item._id}
-            onPress={() => {
-              onShow("streaming", {
-                movie: item,
-              });
-            }}
-            style={{ width: "32%" }}
+            key={movie._id}
+            onPress={() => onShow("streaming", { movie })}
+            style={styles.film}
           >
             <Image
-              source={`${data.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`}
-              style={{ width: "100%", aspectRatio: 3 / 4 }}
+              source={`${data.APP_DOMAIN_CDN_IMAGE}/${movie.poster_url}`}
+              style={styles.filmImage}
             />
-            <ThemedText>{item.name}</ThemedText>
+            <Text style={styles.filmName}>{movie.name}</Text>
           </TouchableOpacity>
         ))}
-      </ThemedView>
-    </ThemedView>
+      </View>
+    </View>
   );
 };
 
 export default FilmList;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 8,
+  },
+  titleWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  title: {
+    fontSize: 20,
+    paddingVertical: 12,
+    color: Colors.text,
+  },
+  titleIcon: {
+    fontSize: 20,
+    color: Colors.text,
+  },
+  filmList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    rowGap: 8,
+  },
+  film: {
+    width: "32%",
+  },
+  filmImage: {
+    width: "100%",
+    aspectRatio: 3 / 4,
+  },
+  filmName: {
+    color: Colors.text,
+  },
+});

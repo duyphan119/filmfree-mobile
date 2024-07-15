@@ -4,10 +4,8 @@ import { useModal } from "@/hooks/useModal";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
-import { Modal, StyleSheet, TouchableOpacity } from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ParallaxScrollView from "../ParallaxScrollView";
-import { ThemedText } from "../ThemedText";
-import { ThemedView } from "../ThemedView";
 import VideoPlayer from "./VideoPlayer";
 
 const ModalStreaming = () => {
@@ -50,7 +48,7 @@ const ModalStreaming = () => {
       animationType="none"
       presentationStyle="fullScreen"
     >
-      <ThemedView
+      <View
         style={{
           padding: Padding.header,
           backgroundColor: "#333",
@@ -63,18 +61,18 @@ const ModalStreaming = () => {
             size={24}
           />
         </TouchableOpacity>
-      </ThemedView>
+      </View>
       <VideoPlayer
         uri={state.episodes?.[0]?.server_data?.[0].link_m3u8 || ""}
       />
-      <ThemedView
+      <View
         style={{
           backgroundColor: "#333",
           flex: 1,
         }}
       >
         <ParallaxScrollView>
-          <ThemedText
+          <Text
             style={{
               padding: Padding.header,
               fontSize: 20,
@@ -84,8 +82,8 @@ const ModalStreaming = () => {
             }}
           >
             {movieName}
-          </ThemedText>
-          <ThemedView
+          </Text>
+          <View
             style={{
               backgroundColor: "#333",
               flex: 1,
@@ -93,52 +91,52 @@ const ModalStreaming = () => {
               rowGap: Padding.header,
             }}
           >
-            <ThemedText
+            <Text
               style={{
                 color: "white",
               }}
             >
               Diễn viên: {state?.movie?.actor?.join(", ")}
-            </ThemedText>
-            <ThemedText
+            </Text>
+            <Text
               style={{
                 color: "white",
               }}
             >
               Đạo diễn: {state?.movie?.director?.join(", ")}
-            </ThemedText>
-            <ThemedText
+            </Text>
+            <Text
               style={{
                 color: "white",
               }}
             >
               Thể loại:{" "}
               {state?.movie?.category?.map((item) => item.name).join(", ")}
-            </ThemedText>
-            <ThemedText
+            </Text>
+            <Text
               style={{
                 color: "white",
               }}
             >
               Quốc gia:{" "}
               {state?.movie?.country?.map((item) => item.name).join(", ")}
-            </ThemedText>
-          </ThemedView>
+            </Text>
+          </View>
           {currentEpisode && currentEpisode.server_data?.length > 1 && (
-            <ThemedView
+            <View
               style={{
                 backgroundColor: "#333",
               }}
             >
-              <ThemedText
+              <Text
                 style={{
                   padding: Padding.header,
                   color: "white",
                 }}
               >
                 Danh sách tập
-              </ThemedText>
-              <ThemedView
+              </Text>
+              <View
                 style={{
                   backgroundColor: "#333",
                   rowGap: 2,
@@ -163,14 +161,14 @@ const ModalStreaming = () => {
                         objectFit: "cover",
                       }}
                     />
-                    <ThemedText style={{ color: "white" }}>{name}</ThemedText>
+                    <Text style={{ color: "white" }}>{name}</Text>
                   </TouchableOpacity>
                 ))}
-              </ThemedView>
-            </ThemedView>
+              </View>
+            </View>
           )}
         </ParallaxScrollView>
-      </ThemedView>
+      </View>
     </Modal>
   );
 };
